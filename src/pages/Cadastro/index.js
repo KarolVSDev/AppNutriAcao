@@ -1,46 +1,89 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 
 export default function Cadastro() {
+    const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
+    const [cnpj, setCnpj] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [cep, setCep] = useState('');
+    const [rua, setRua] = useState('');
+    const [numero, setNumero] = useState('');
     const [senha, setSenha] = useState('');
 
-    const handleCadastro = () => {
-        fetch('http://localhost:3001/cadastro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                senha: senha,
-            }),
-        })
-        .then((response) => {
+    const handleCadastro = async () => {
+        try {
+            const response = await fetch('http://192.168.100.8:3003/cadastro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nome: nome,
+                    email: email,
+                    cnpj: cnpj,
+                    telefone: telefone,
+                    cep: cep,
+                    rua: rua,
+                    numero: numero,
+                    senha: senha,
+                }),
+            });
+
+            const data = await response.json();
+
             if (response.ok) {
-                console.log('Cadastro bem-sucedido');
-                Alert.alert('Sucesso', 'Usuário cadastrado com sucesso');
+                Alert.alert('Sucesso', data.message);
             } else {
-                Alert.alert('Erro', 'Erro ao cadastrar usuário');
+                Alert.alert('Erro', data.message);
             }
-        })
-        .catch((error) => {
+        } catch (error) {
             console.error('Erro ao cadastrar usuário:', error);
             Alert.alert('Erro', 'Erro ao cadastrar usuário');
-        });
+        }
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Cadastre sua ONG</Text>
             <TextInput
-                placeholder='Digite seu email...'
+                placeholder='Nome'
+                style={styles.input}
+                onChangeText={(text) => setNome(text)}
+            />
+            <TextInput
+                placeholder='Email'
                 style={styles.input}
                 onChangeText={(text) => setEmail(text)}
             />
             <TextInput
-                placeholder='Digite sua senha...'
+                placeholder='CNPJ'
+                style={styles.input}
+                onChangeText={(text) => setCnpj(text)}
+            />
+            <TextInput
+                placeholder='Telefone'
+                style={styles.input}
+                onChangeText={(text) => setTelefone(text)}
+            />
+            <TextInput
+                placeholder='CEP'
+                style={styles.input}
+                onChangeText={(text) => setCep(text)}
+            />
+            <TextInput
+                placeholder='Rua'
+                style={styles.input}
+                onChangeText={(text) => setRua(text)}
+            />
+            <TextInput
+                placeholder='Número'
+                style={styles.input}
+                onChangeText={(text) => setNumero(text)}
+            />
+            <TextInput
+                placeholder='Senha'
                 style={styles.input}
                 secureTextEntry={true}
                 onChangeText={(text) => setSenha(text)}

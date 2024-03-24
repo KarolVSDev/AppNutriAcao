@@ -1,8 +1,9 @@
 const express = require('express');
 const mysql = require('mysql');
+const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3001;
+const port = 3003;
 
 // Middleware para análise de corpo JSON
 app.use(express.json());
@@ -68,6 +69,22 @@ app.get('/usuarios', (req, res) => {
       return;
     }
     res.json(results);
+  });
+});
+
+
+// Rota para cadastro de usuários
+app.post('/cadastro', (req, res) => {
+  const { nome, email, cnpj, telefone, cep, rua, numero, senha } = req.body;
+  const sql = 'INSERT INTO users (nome, email, cnpj, telefone, cep, rua, numero, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  connection.query(sql, [nome, email, cnpj,telefone, cep, rua, numero, senha], (err, result) => {
+      if (err) {
+          console.error('Erro ao cadastrar usuário:', err);
+          res.status(500).json({ message: 'Erro ao cadastrar usuário' });
+      } else {
+          console.log('Usuário cadastrado com sucesso');
+          res.status(200).json({ message: 'Usuário cadastrado com sucesso' });
+      }
   });
 });
 
