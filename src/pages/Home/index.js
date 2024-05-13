@@ -1,38 +1,62 @@
-    import React from 'react';
+    import React, { useState, useEffect } from 'react';
     import * as Animatable from 'react-native-animatable'
     import {useNavigation} from '@react-navigation/native'
 
+    import axios from 'axios';
 
     import { 
         View,
         Text,
         StyleSheet,
         TouchableOpacity, 
-        Image
+        Image,
+        FlatList
     } from 'react-native';
 
-    export default function Welcome() {
+    export default function Home() {
         const navigation = useNavigation();
+        const [data, setData] = useState([
+            
+        ]);
+
+        useEffect(()=>{
+            carregaDados();
+        },[]); //função chamada quando a página for redenrizada
+
+        async function carregaDados(){
+            const response = await axios.get('http://192.168.100.8:3006/usuarios');
+            
+            console.log(response.data);
+            setData([...response.data]);
+        }
+
         return (
-            <View style={styles.containerLogo}>
-                <View style={styles.container}>
-                    
-                    <Animatable.Image
-                        animation='flipInY'
-                        source={require('../../assets/logo.png')}
-                        resizeMode='contain'
-                        style={styles.logo}
-                    />
-                </View>
+            <View style={styles.container}>
+                <FlatList style={{marginTop:35}}
+                contentContainerStyle={{marginHorizontal:20}}
+                data={data}
+                keyExtractor={item => String(item.ongcod)}
+                renderItem={({item}) => <ListItem data={item}/>} //passando dados para meu lisItem e renderizando ele
+                />
+
             </View>
         );
+    }
+
+    function ListItem({data}){
+        return(
+            <View style={styles.listItem}>
+                <TouchableOpacity>
+                <Text style={styles.listText}>{data.nome}</Text>
+                <Text style={styles.listText}>{data.rua}</Text>
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     const styles = StyleSheet.create({
         container: {
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
             backgroundColor: '#FFF'
         },
         containerLogo:{
@@ -87,5 +111,16 @@
             fontSize: 18,
             fontWeight: 'bold',
             color: '#B543D1'
+        },
+        listItem: {
+            backgroundColor: '#B543D1',
+            borderRadius: 10,
+            padding: 25,
+            marginTop: 20,
+            width: '100%'
+        },
+        listText:{
+            fontSize: 16,
+            color: '#FFF'
         }
     });

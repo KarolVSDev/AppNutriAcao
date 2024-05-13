@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+
 
 export default function Cadastro() {
     const [nome, setNome] = useState('');
@@ -14,7 +16,7 @@ export default function Cadastro() {
 
     const handleCadastro = async () => {
         try {
-            const response = await fetch('http://192.168.100.8:3003/cadastro', {
+            const response = await fetch('http://192.168.100.8:3006/cadastro', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +48,10 @@ export default function Cadastro() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Cadastre sua ONG</Text>
+            <Text style={styles.title}>Cadastro</Text>
+            <View style={styles.circle}><Image style={{width:125, height:125, marginBottom:10}} source={require('../../assets/user_profile.png')}/></View>
+            
+            
             <TextInput
                 placeholder='Nome'
                 style={styles.input}
@@ -100,30 +105,43 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#B443D1',
     },
     title: {
-        fontSize: 24,
+        fontSize: 36,
         marginBottom: 20,
+        color: 'white',
+        fontWeight:'bold',
     },
     input: {
         width: '80%',
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
-        padding: 10,
+        padding: 6,
         marginBottom: 10,
+        borderRadius: 20,
     },
     button: {
-        backgroundColor: '#B543D1',
+        backgroundColor: '#B443D1',
         width: '80%',
         borderRadius: 5,
-        padding: 15,
+        padding: 8,
         alignItems: 'center',
         marginTop: 20,
+        borderWidth: 1,
+        borderColor: 'white',
+        borderRadius: 30
     },
     buttonText: {
-        color: '#fff',
+        color: 'white',
         fontSize: 18,
     },
+    circle: {
+        width: 125,
+        height: 125,
+        borderRadius: 125 / 2,
+        backgroundColor: "white",
+        bottom: 15,
+      },
 });

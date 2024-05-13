@@ -1,18 +1,18 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3003;
+const port = 3006;
 
 // Middleware para análise de corpo JSON
 app.use(express.json());
 
 // Configuração do banco de dados MySQL
 const connection = mysql.createConnection({
-  host: '192.168.100.8',
-  user: 'root',
-  password: '',
+  host: 'localhost',
+  user: 'batbook',
+  password: '123',
   database: 'nutriacao'
 });
 
@@ -29,7 +29,7 @@ app.post('/usuarios', (req, res) => {
     }
 
     // Consulta SQL para verificar se o usuário existe com o email e senha fornecidos
-    const query = 'SELECT * FROM usuarios WHERE email = ? AND senha = ?';
+    const query = 'SELECT * FROM users WHERE email = ? AND senha = ?';
     console.log('Consulta SQL:', query, [email, senha]);
     connection.query(query, [email, senha], (error, results) => {
         if (error) {
@@ -62,7 +62,7 @@ connection.connect((err) => {
 
 // Rota para recuperar dados do banco de dados (opcional)
 app.get('/usuarios', (req, res) => {
-  connection.query('SELECT * FROM usuarios', (error, results) => {
+  connection.query('SELECT * FROM users', (error, results) => {
     if (error) {
       console.error('Erro ao executar consulta SQL:', error);
       res.status(500).json({ error: 'Erro interno do servidor' });

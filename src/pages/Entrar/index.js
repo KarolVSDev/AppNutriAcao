@@ -14,7 +14,7 @@ export default function Entrar() {
             return;
         }
 
-        fetch('http://192.168.100.8:3003/usuarios', {
+        fetch('http://192.168.100.8:3006/usuarios', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

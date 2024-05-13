@@ -25,6 +25,7 @@ export default function Routes() {
                 <Stack.Screen 
                 name="Cadastro" 
                 component={Cadastro} 
+                options={{headerShown: false}}
             />
                <Stack.Screen 
                 name="Home" 
