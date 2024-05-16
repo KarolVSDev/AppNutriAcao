@@ -1,17 +1,47 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import{Feather} from '@expo/vector-icons';
 
 import Entrar from '../pages/Entrar';
 import Welcome from '../pages/Welcome';
 import Cadastro from '../pages/Cadastro';
 import Home from '../pages/Home';
-
+import Usuario from '../pages/Usuario';
+import Config from '../pages/Configuracao';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
+function Tabs(){
+    return(
+        <Tab.Navigator screenOptions={{headerShown:false}}>
+
+            <Tab.Screen name="home" component={Home}
+            options={{
+                tabBarIcon: ({color, size})=> <Feather name='home' color={color} size={size}/>,
+                tabBarLabel: 'Inicío'
+                
+            }}>
+            </Tab.Screen>
+            <Tab.Screen name="usuario" component={Usuario}
+            options={{
+                 tabBarIcon: ({color, size})=> <Feather name='user' color={color} size={size}/>,
+                  tabBarLabel: 'usuário'
+                            
+              }}></Tab.Screen>
+            <Tab.Screen name="config" component={Config}
+            options={{
+                tabBarIcon: ({color, size})=> <Feather name='settings' color={color} size={size}/>,
+                 tabBarLabel: 'Configuração'
+                           
+             }}          
+            ></Tab.Screen>
+        </Tab.Navigator>
+    )
+}
 export default function Routes() {
     return (
-            <Stack.Navigator >
+            <Stack.Navigator screenOptions={{headerShown:false}} >
                 <Stack.Screen 
                 name="Welcome" 
                 component={Welcome} 
@@ -29,8 +59,10 @@ export default function Routes() {
             />
                <Stack.Screen 
                 name="Home" 
-                component={Home} 
+                component={Tabs} 
             />
+
             </Stack.Navigator>
+
     );
 }
