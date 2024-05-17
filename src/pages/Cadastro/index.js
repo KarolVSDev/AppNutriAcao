@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image } fro
 import { useNavigation } from '@react-navigation/native';
 
 
-
 export default function Cadastro() {
+    const navigation = useNavigation(); 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [cnpj, setCnpj] = useState('');
@@ -15,6 +15,10 @@ export default function Cadastro() {
     const [senha, setSenha] = useState('');
 
     const handleCadastro = async () => {
+        if (!nome || !email || !cnpj || !telefone || !cep || !rua || !numero || !senha) {
+            Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+            return;
+        }
         try {
             const response = await fetch('http://192.168.100.8:3006/cadastro', {
                 method: 'POST',
@@ -37,6 +41,7 @@ export default function Cadastro() {
 
             if (response.ok) {
                 Alert.alert('Sucesso', data.message);
+                navigation.navigate('Entrar');
             } else {
                 Alert.alert('Erro', data.message);
             }

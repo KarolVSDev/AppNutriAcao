@@ -13,7 +13,7 @@ export default function Entrar() {
             Alert.alert('Erro', 'Por favor, insira seu email e senha');
             return;
         }
-
+    
         fetch('http://192.168.100.8:3006/usuarios', {
             method: 'POST',
             headers: {
@@ -25,13 +25,17 @@ export default function Entrar() {
             }),
         })
             .then((response) => {
-                if (response.ok) {
+                console.log('Status da resposta:', response.status);
+                return response.text().then((text) => ({ status: response.status, text }));
+            })
+            .then(({ status, text }) => {
+                console.log('Conteúdo da resposta:', text); // Adicionado para debugar o conteúdo da resposta
+                if (status === 200) {
                     console.log('Login bem-sucedido');
-                    //ao fazer o login vai pra tela do home
                     navigation.navigate('Home');
-                    // Navegue para a próxima tela ou execute outra ação desejada
                 } else {
-                    Alert.alert('Erro', 'Credenciais inválidas');
+                    console.log('Erro no login:', text);
+                    Alert.alert('Erro', `Erro ao fazer login: ${text}`);
                 }
             })
             .catch((error) => {
@@ -39,7 +43,6 @@ export default function Entrar() {
                 Alert.alert('Erro', 'Erro ao fazer login');
             });
     };
-
     return (
         <View style={styles.container}>
             <Animatable.View animation='fadeInLeft' delay={500} style={styles.containerHeader}>

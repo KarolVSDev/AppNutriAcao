@@ -1,45 +1,45 @@
 import React from 'react';
-import * as Animatable from 'react-native-animatable'
-import {useNavigation} from '@react-navigation/native'
+    import * as Animatable from 'react-native-animatable'
+    import {useNavigation} from '@react-navigation/native'
 
 
 
 
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableOpacity,
-    Image
-} from 'react-native';
+    import {
+        View,
+        Text,
+        StyleSheet,
+        TouchableOpacity,
+        Image
+    } from 'react-native';
 
 
-export default function Welcome() {
-    const navigation = useNavigation();
-    return (
-        <View style={styles.containerLogo}>
-            <View style={styles.container}>
-               
-                <Animatable.Image
-                    animation='flipInY'
-                    source={require('../../assets/logo.png')}
-                    resizeMode='contain'
-                    style={styles.logo}
-                />
+    export default function Welcome() {
+        const navigation = useNavigation();
+        return (
+            <View style={styles.containerLogo}>
+                <View style={styles.container}>
+                   
+                    <Animatable.Image
+                        animation='flipInY'
+                        source={require('../../assets/logo.png')}
+                        resizeMode='contain'
+                        style={styles.logo}
+                    />
+                </View>
+                <Animatable.View animation='fadeInUp' delay={600} style={styles.containerForm}>
+                    <Text style={styles.title}>Bem vindo ao NutriAção</Text>
+                    <Text style={styles.text}>Faça o Login para começar</Text>
+                   
+                    <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Entrar')}>
+                        <Text style={styles.buttonText}>Acessar</Text>
+                    </TouchableOpacity>
+
+
+                </Animatable.View>
             </View>
-            <Animatable.View animation='fadeInUp' delay={600} style={styles.containerForm}>
-                <Text style={styles.title}>Bem vindo ao NutriAção</Text>
-                <Text style={styles.text}>Faça o Login para começar</Text>
-               
-                <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Entrar')}>
-                    <Text style={styles.buttonText}>Acessar</Text>
-                </TouchableOpacity>
-
-
-            </Animatable.View>
-        </View>
-    );
-}
+        );
+    }
 
 
     export const styles = StyleSheet.create({
@@ -61,21 +61,28 @@ export default function Welcome() {
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         paddingTop: '10%',
-        paddingEnd: '15%'
+        paddingHorizontal:'25%',
+        paddingBottom:'5%'
     },
+    centerContent: {
+        flex: 1,
+        justifyContent: 'center', // Centraliza verticalmente o texto e o botão
+        alignItems: 'center' // Centraliza horizontalmente o texto e o botão
+    },
+   
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         color: '#FFF',
-        marginBottom: 30,
-        marginTop: 10,
-        textAlign: 'center'
+        marginBottom: 20,
+        textAlign: 'center',
+        maxWidth:'90%'
     },
-    text: {
+    text:{
         fontSize: 15,
         textAlign: 'center',
-        marginTop: 100,
-        marginBottom: 12,
+        marginTop: 20,
+        marginBottom: 30,
         color: '#a1a1a1'
     },
     logo: {
@@ -86,8 +93,8 @@ export default function Welcome() {
     },
     button: {
         backgroundColor: '#FFF',
-        paddingVertical: 12,
-        paddingHorizontal: 24,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
         borderRadius: 6,
         position: 'absolute',
         width: '60%',
