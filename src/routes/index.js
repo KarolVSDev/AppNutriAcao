@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import{Feather} from '@expo/vector-icons';
 
 import Entrar from '../pages/Entrar';
+import Cadastro_user from '../pages/Cadastro_user';
+import Pergunta from '../pages/Pergunta';
 import Welcome from '../pages/Welcome';
 import Cadastro from '../pages/Cadastro';
 import Home from '../pages/Home';
@@ -60,6 +62,14 @@ export default function Routes() {
                <Stack.Screen 
                 name="Home" 
                 component={Tabs} 
+            />
+             <Stack.Screen 
+                name="Pergunta" 
+                component={Pergunta} 
+            />
+             <Stack.Screen 
+                name="Cadastro_user" 
+                component={Cadastro_user} 
             />
 
             </Stack.Navigator>

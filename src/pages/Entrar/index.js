@@ -68,7 +68,7 @@ export default function Entrar() {
                     <Text style={styles.buttonText}>Acessar</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Cadastro')}>
+                <TouchableOpacity style={styles.buttonRegister} onPress={() => navigation.navigate('Pergunta')}>
                     <Text style={styles.registerText}>Não possui uma conta? Cadastre-se</Text>
                 </TouchableOpacity>
             </Animatable.View>
