@@ -14,6 +14,7 @@
     } from 'react-native';
 
     export default function Home() {
+        
         const navigation = useNavigation();
         const [data, setData] = useState([
             
@@ -32,6 +33,7 @@
 
         return (
             <View style={styles.container}>
+                <Text>Home</Text>
                 <FlatList style={{marginTop:35}}
                 contentContainerStyle={{marginHorizontal:20}}
                 data={data}
