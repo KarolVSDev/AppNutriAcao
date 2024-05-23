@@ -54,7 +54,7 @@ export default function Cadastro() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Cadastro</Text>
-            <View style={styles.circle}><Image style={{width:125, height:125, marginBottom:10}} source={require('../../assets/user_profile.png')}/></View>
+            <View style={styles.circle}><Image style={{width:125, height:125, marginBottom:10}} source={require('../../assets/user.png')}/></View>
             
             
             <TextInput

@@ -1,111 +1,103 @@
 import React from 'react';
-    import * as Animatable from 'react-native-animatable'
-    import {useNavigation} from '@react-navigation/native'
+import * as Animatable from 'react-native-animatable';
+import { useNavigation } from '@react-navigation/native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 
+const Welcome = () => {
+  const navigation = useNavigation();
 
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../assets/logon.png')}
+          style={styles.logo}
+        />
+      </View>
+      <View style={styles.loginAreaContainer}>
+        <Image
+          source={require('../../assets/container.png')}
+          style={styles.loginAreaBackground}
+        />
+        <View style={styles.loginAreaContent}>
+        <Text style={styles.welcomeText}>Bem-vindo(a) ao NutriAção!</Text>
+          <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Entrar')}>
+            <Text style={styles.loginButtonText}>LOGIN</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('Pergunta')}>
+            <Text style={[styles.registerText, { color: '#B443D1' }]}>CADASTRAR</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
+  logoContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 280.5,
+    height: 70,
+  },
+  loginAreaContainer: {
+    flex: 2,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  loginAreaBackground: {
+    position: 'absolute',
+    width: '100%',
+    height: '70%',
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
+  },
+  loginAreaContent: {
+    width: '100%',
+    alignItems: 'center',
+    paddingTop: 100,
+    paddingHorizontal: 20,
+  },
+  loginButton: {
+    width: '80%',
+    height: 40,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    marginBottom: 13,
+  },
+  loginButtonText: {
+    color: '#B443D1',
+    fontSize: 16,
+  },
+  registerButton: {
+    width: '80%',
+    height: 40,
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    marginBottom: 80,
+  },
+  welcomeText: {
+    fontSize: 20,
+    color: '#FFF',
+    marginBottom: 70,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  registerText: {
+    fontSize: 16,
+  },
+  
+});
 
-    import {
-        View,
-        Text,
-        StyleSheet,
-        TouchableOpacity,
-        Image
-    } from 'react-native';
-
-
-    export default function Welcome() {
-        const navigation = useNavigation();
-        return (
-            <View style={styles.containerLogo}>
-                <View style={styles.container}>
-                   
-                    <Animatable.Image
-                        animation='flipInY'
-                        source={require('../../assets/logo.png')}
-                        resizeMode='contain'
-                        style={styles.logo}
-                    />
-                </View>
-                <Animatable.View animation='fadeInUp' delay={600} style={styles.containerForm}>
-                    <Text style={styles.title}>Bem vindo ao NutriAção</Text>
-                    <Text style={styles.text}>Faça o Login para começar</Text>
-                   
-                    <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Entrar')}>
-                        <Text style={styles.buttonText}>Acessar</Text>
-                    </TouchableOpacity>
-
-
-                </Animatable.View>
-            </View>
-        );
-    }
-
-
-    export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#FFF'
-    },
-    containerLogo: {
-        flex: 2,
-        backgroundColor: '#FFF',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    containerForm: {
-        flex: 1,
-        backgroundColor: '#9B37B5',
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-        paddingTop: '10%',
-        paddingHorizontal:'25%',
-        paddingBottom:'5%'
-    },
-    centerContent: {
-        flex: 1,
-        justifyContent: 'center', // Centraliza verticalmente o texto e o botão
-        alignItems: 'center' // Centraliza horizontalmente o texto e o botão
-    },
-   
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#FFF',
-        marginBottom: 20,
-        textAlign: 'center',
-        maxWidth:'90%'
-    },
-    text:{
-        fontSize: 15,
-        textAlign: 'center',
-        marginTop: 20,
-        marginBottom: 30,
-        color: '#a1a1a1'
-    },
-    logo: {
-        flex: 2,
-        width: 300,
-        height: 400,
-        alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#FFF',
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-        borderRadius: 6,
-        position: 'absolute',
-        width: '60%',
-        alignSelf: 'center',
-        bottom: '15%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    buttonText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#B543D1'
-    }
-    });
+export default Welcome;

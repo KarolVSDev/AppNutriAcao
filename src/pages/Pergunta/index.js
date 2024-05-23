@@ -17,19 +17,19 @@ export default function Pergunta() {
             <View style={styles.container}>
                 <Animatable.Image
                     animation='flipInY'
-                    source={require('../../assets/logo.png')}
+                    source={require('../../assets/logon.png')}
                     resizeMode='contain'
                     style={styles.logo}
                 />
             </View>
             <Animatable.View animation='fadeInUp' delay={600} style={styles.containerForm}>
-                <Text style={styles.title}>Você é uma ONG ou pessoa física?</Text>
+                <Text style={styles.title}>Você é uma ONG?</Text>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Cadastro')}>
-                        <Text style={styles.buttonText}>ONG</Text>
+                        <Text style={styles.buttonText}>SIM</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Cadastro_user')}>
-                        <Text style={styles.buttonText}>PESSOA FÍSICA</Text>
+                        <Text style={styles.buttonText}>NÃO</Text>
                     </TouchableOpacity>
                 </View>
             </Animatable.View>
@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         paddingTop: '10%',
-        paddingHorizontal: '10%',
+        paddingHorizontal: '30%',
         paddingBottom: '5%',
         alignItems: 'center', // Centraliza horizontalmente
     },
