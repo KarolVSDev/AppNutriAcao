@@ -7,7 +7,6 @@ export default function Entrar() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-
     const handleLogin = () => {
         if (!email || !senha) {
             Alert.alert('Erro', 'Por favor, insira seu email e senha');

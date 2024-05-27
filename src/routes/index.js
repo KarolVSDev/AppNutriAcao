@@ -10,6 +10,7 @@ import Cadastro from '../pages/Cadastro';
 import Home from '../pages/Home';
 import Usuario from '../pages/Usuario';
 import Config from '../pages/Configuracao';
+import Acessibilidade from '../pages/Acessibilidade';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -70,6 +71,10 @@ export default function Routes() {
              <Stack.Screen 
                 name="Cadastro_user" 
                 component={Cadastro_user} 
+            />
+             <Stack.Screen 
+                name="Acessibilidade" 
+                component={Acessibilidade} 
             />
 
             </Stack.Navigator>
