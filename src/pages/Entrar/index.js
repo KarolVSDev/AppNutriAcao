@@ -7,41 +7,17 @@ export default function Entrar() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+
     const handleLogin = () => {
         if (!email || !senha) {
             Alert.alert('Erro', 'Por favor, insira seu email e senha');
             return;
         }
-    
-        fetch('http://192.168.100.8:3006/usuarios', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                senha: senha,
-            }),
-        })
-            .then((response) => {
-                console.log('Status da resposta:', response.status);
-                return response.text().then((text) => ({ status: response.status, text }));
-            })
-            .then(({ status, text }) => {
-                console.log('Conteúdo da resposta:', text); // Adicionado para debugar o conteúdo da resposta
-                if (status === 200) {
-                    console.log('Login bem-sucedido');
-                    navigation.navigate('Home');
-                } else {
-                    console.log('Erro no login:', text);
-                    Alert.alert('Erro', `Erro ao fazer login: ${text}`);
-                }
-            })
-            .catch((error) => {
-                console.error('Erro ao fazer login:', error);
-                Alert.alert('Erro', 'Erro ao fazer login');
-            });
+
+        // Passando email e senha como parâmetros na navegação
+        navigation.navigate('Home', { email, senha });
     };
+
     return (
         <View style={styles.container}>
             <Animatable.View animation='fadeInLeft' delay={500} style={styles.containerHeader}>

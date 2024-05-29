@@ -1,122 +1,267 @@
 import React, { useState, useEffect } from 'react';
-import * as Animatable from 'react-native-animatable';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { 
     View,
     Text,
     StyleSheet,
     TouchableOpacity, 
-    FlatList
+    FlatList,
+    Alert,
+    TextInput
 } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function Home() {
-    
     const navigation = useNavigation();
+    const route = useRoute();
+    const { email, senha } = route.params || {}; 
     const [data, setData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [showNoResults, setShowNoResults] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+    const [formData, setFormData] = useState({
+        nome: '',
+        endereco: '',
+        zona: ''
+    });
 
     useEffect(() => {
-        carregaDados();
-    }, []); //função chamada quando a página for redenrizada
+        if (email && senha) {
+            carregaDados();
+        }
+        carregaPontosColeta(); // Carrega os pontos de coleta ao montar o componente
+    }, [email, senha]);
 
-    async function carregaDados() {
-        const response = await axios.get('http://192.168.100.8:3006/usuarios');
-        console.log(response.data);
-        setData([...response.data]);
+    async function carregaDados(){
+        try {
+            const response = await axios.post('http://192.168.100.8:3006/usuarios', {
+                email: email,
+                senha: senha
+            });
+            console.log(response.data);
+            if (response.data && response.data.data) {
+                setData(response.data.data); // Acessar os dados corretamente
+            }
+        } catch (error) {
+            // Tratamento de erros
+            if (error.response) {
+                console.error('Erro no servidor:', error.response.data);
+            } else if (error.request) {
+                console.error('Erro na requisição:', error.request);
+            } else {
+                console.error('Erro:', error.message);
+            }
+        }
+    }
+
+    async function carregaPontosColeta(){
+        try {
+            const response = await axios.get('http://192.168.100.8:3006/pontos_coleta');
+            console.log('Pontos de coleta:', response.data);
+            if (Array.isArray(response.data)) {
+                setData(response.data); // Atualizar a lista de dados com os pontos de coleta
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('Erro no servidor:', error.response.data);
+            } else if (error.request) {
+                console.error('Erro na requisição:', error.request);
+            } else {
+                console.error('Erro:', error.message);
+            }
+        }
+    }
+
+    const filteredData = data.filter(item => {
+        return item && (item.nome.toLowerCase().includes(searchTerm.toLowerCase()) || item.endereco.toLowerCase().includes(searchTerm.toLowerCase()));
+    });
+
+    useEffect(() => {
+        setShowNoResults(searchTerm.length > 0 && filteredData.length === 0);
+    }, [searchTerm, filteredData]);
+
+    function toggleFormVisibility() {
+        setShowForm(!showForm);
+    }
+
+    async function handleSubmit() {
+        // Verifica se algum campo está em branco
+    if (!formData.nome || !formData.endereco || !formData.zona) {
+        Alert.alert('Erro', 'Por favor, preencha todos os campos antes de salvar.');
+        return;
+    }
+        try {
+            const response = await axios.post('http://192.168.100.8:3006/pontos_coleta', formData);
+            console.log('Resposta do servidor:', response.data);
+
+            // Atualizar a lista de dados com o novo ponto de coleta
+            if (response.data && response.data.data) {
+                setData(prevData => [...prevData, response.data.data]);
+            }
+
+            setFormData({
+                nome: '',
+                endereco: '',
+                zona: ''
+            });
+
+            setShowForm(false);
+        } catch (error) {
+            if (error.response) {
+                console.error('Erro no servidor:', error.response.data);
+            } else if (error.request) {
+                console.error('Erro na requisição:', error.request);
+            } else {
+                console.error('Erro:', error.message);
+            }
+        }
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Home</Text>
-            <FlatList
-                style={{ marginTop: 20 }}
-                contentContainerStyle={{ marginHorizontal: 20 }}
-                data={data}
-                keyExtractor={item => String(item.ongcod)}
-                renderItem={({ item }) => <ListItem data={item} />} //passando dados para meu lisItem e renderizando ele
+    <View style={styles.searchContainer}>
+        <FontAwesome name="search" size={20} color="gray" style={styles.searchIcon} />
+        <TextInput
+            style={styles.searchInput}
+            placeholder="Pesquisar..."
+            onChangeText={text => setSearchTerm(text)}
+            value={searchTerm}
+        />
+    </View>
+
+    <FlatList 
+        style={{ marginTop: 20 }}
+        contentContainerStyle={{ marginHorizontal: 20 }}
+        data={filteredData}
+        keyExtractor={item => String(item.id)}
+        renderItem={({item}) => item ? <ColetaCard data={item} /> : null}
+    />
+    {showNoResults && (
+        <Text style={styles.noResultsText}>Nenhum resultado encontrado.</Text>
+    )}
+
+    <TouchableOpacity style={styles.addButton} onPress={toggleFormVisibility}>
+        <Text style={styles.addButtonText}>Inserir ponto de coleta</Text>
+    </TouchableOpacity>
+
+    {showForm && (
+        <View style={styles.formContainer}>
+            <TextInput
+                style={styles.input}
+                placeholder="Nome"
+                onChangeText={text => setFormData({...formData, nome: text})}
+                value={formData.nome}
             />
+            <TextInput
+                style={styles.input}
+                placeholder="Endereço"
+                onChangeText={text => setFormData({...formData, endereco: text})}
+                value={formData.endereco}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Zona"
+                onChangeText={text => setFormData({...formData, zona: text})}
+                value={formData.zona}
+            />
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                <Text style={styles.submitButtonText}>Salvar</Text>
+            </TouchableOpacity>
         </View>
+    )}
+</View>
     );
 }
 
-function ListItem({ data }) {
+function ColetaCard({ data }) {
     return (
-        <View style={styles.listItem}>
-            <TouchableOpacity>
-                <Text style={styles.listText}>{data.nome}</Text>
-                <Text style={styles.listText}>{data.rua}</Text>
-            </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.cardContainer}>
+            <Text style={styles.cardTitle}>{data.nome}</Text>
+            <Text style={styles.cardText}>Endereço: {data.endereco}</Text>
+            <Text style={styles.cardText}>Zona: {data.zona}</Text>
+        </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFF',
-        justifyContent: 'center',  // Centraliza verticalmente
-        alignItems: 'center'       // Centraliza horizontalmente
+        backgroundColor: '#FFF'
     },
-    containerLogo: {
-        flex: 2,
-        backgroundColor: '#FFF',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    containerForm: {
-        flex: 1,
-        backgroundColor: '#9B37B5',
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-        paddingTop: '10%',
-        paddingEnd: '15%'
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: '',
-        color: '#000',
-        textAlign: 'center',
-        marginBottom: 10 // Ajuste de margem para separação do texto e lista
-    },
-    text: {
-        fontSize: 15,
-        textAlign: 'center',
-        marginTop: 100,
-        marginBottom: 12,
-        color: '#a1a1a1'
-    },
-    logo: {
-        flex: 2,
-        width: 300, // Defina o tamanho desejado
-        height: 400, // Defina o tamanho desejado
-        alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#FFF',
-        paddingVertical: 12,
-        paddingHorizontal: 24,
-        borderRadius: 6,
-        position: 'absolute',
-        width: '60%',
-        alignSelf: 'center',
-        bottom: '15%',
+    searchContainer: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: '#F0F0F0',
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        marginTop: 50,
+        marginHorizontal: 20,
     },
-    buttonText: {
+    searchInput: {
+        flex: 1,
+        height: 40,
+        paddingHorizontal: 10,
+    },
+    searchIcon: {
+        marginRight: 5,
+    },
+    cardContainer: {
+        backgroundColor: '#F0F0F0',
+        borderRadius: 8,
+        padding: 20,
+        marginBottom: 10,
+    },
+    cardTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#B543D1'
+        marginBottom: 5,
     },
-    listItem: {
-        backgroundColor: '#B543D1',
-        borderRadius: 10,
-        padding: 25,
-        marginTop: 20,
-        width: '100%'
-    },
-    listText: {
+    cardText: {
         fontSize: 16,
-        color: '#FFF'
-    }
+        marginBottom: 3,
+    },
+    noResultsText: {
+        alignSelf: 'center',
+        marginTop: 10,
+        fontSize: 16,
+        color:'#A1A1A1'
+    },
+    addButton: {
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 8,
+        margin: 20,
+        alignItems: 'center',
+    },
+    addButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    formContainer: {
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        padding: 20,
+        margin: 20,
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 8,
+        marginBottom: 10,
+        paddingHorizontal: 10,
+    },
+    submitButton: {
+        backgroundColor: 'blue',
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    submitButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });

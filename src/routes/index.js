@@ -37,7 +37,8 @@ function Tabs(){
                 tabBarIcon: ({color, size})=> <Feather name='settings' color={color} size={size}/>,
                  tabBarLabel: 'Configuração'
                            
-             }}          
+             }}    
+                   
             ></Tab.Screen>
         </Tab.Navigator>
     )

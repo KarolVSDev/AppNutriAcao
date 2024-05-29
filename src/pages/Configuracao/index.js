@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StatusBar } from "expo-status-bar";
 import Slider from '@react-native-community/slider';
 import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity } from 'react-native';
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     alignItems: 'center',
-    justifyContent: 'flex-start',
     paddingBottom: 60, // Espaço para o quadrado na parte inferior
   },
   card: {
