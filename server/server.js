@@ -58,6 +58,56 @@ app.post('/pontos_coleta', (req, res) => {
   });
 });
 
+
+// Rota para cadastro de usuários
+app.post('/cadastro', (req, res) => {
+  const { nome, email, cnpj, telefone, cep, rua, numero, senha } = req.body;
+  
+  // Verificar se o email já está em uso
+  connection.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
+      if (err) {
+          console.error('Erro ao verificar email:', err);
+          res.status(500).json({ message: 'Erro ao verificar email' });
+          return;
+      }
+
+      if (results.length > 0) {
+          // O email já está em uso
+          res.status(400).json({ error: 'Email já está em uso' });
+          return;
+      }
+
+      // Verificar se o CNPJ já está em uso
+      connection.query('SELECT * FROM usuarios WHERE cnpj = ?', [cnpj], (err, results) => {
+          if (err) {
+              console.error('Erro ao verificar CNPJ:', err);
+              res.status(500).json({ message: 'Erro ao verificar CNPJ' });
+              return;
+          }
+
+          if (results.length > 0) {
+              // O CNPJ já está em uso
+              res.status(400).json({ error: 'CNPJ já está em uso' });
+              return;
+          }
+
+          // Se o email e o CNPJ não estão em uso, inserir o usuário no banco de dados
+          const sql = 'INSERT INTO usuarios (nome, email, cnpj, telefone, cep, rua, numero, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+          connection.query(sql, [nome, email, cnpj, telefone, cep, rua, numero, senha], (err, result) => {
+              if (err) {
+                  console.error('Erro ao cadastrar usuário:', err);
+                  res.status(500).json({ message: 'Erro ao cadastrar usuário' });
+              } else {
+                  console.log('Usuário cadastrado com sucesso');
+                  res.status(200).json({ message: 'Usuário cadastrado com sucesso' });
+                  // Redirecionar para a página de login após o cadastro bem-sucedido
+                  // res.redirect('/Entrar'); // Isso só funcionaria se você estivesse usando Express com renderização de páginas
+              }
+          });
+      });
+  });
+});
+
 // Rota para login de usuário
 app.post('/usuarios', (req, res) => {
   const { email, senha } = req.body;

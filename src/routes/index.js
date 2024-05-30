@@ -77,6 +77,10 @@ export default function Routes() {
                 name="Acessibilidade" 
                 component={Acessibilidade} 
             />
+            <Stack.Screen 
+                name="Usuario" 
+                component={Usuario} 
+            />
 
             </Stack.Navigator>
 

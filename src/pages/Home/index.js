@@ -19,7 +19,7 @@ export default function Home() {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [showNoResults, setShowNoResults] = useState(false);
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(false); // Estado para controlar a exibição do formulário
     const [formData, setFormData] = useState({
         nome: '',
         endereco: '',
@@ -32,6 +32,13 @@ export default function Home() {
         }
         carregaPontosColeta(); // Carrega os pontos de coleta ao montar o componente
     }, [email, senha]);
+
+    function toggleFormVisibility() {
+        setShowForm(!showForm); // Alternar entre mostrar e ocultar o formulário
+    }
+    function handleCloseForm() {
+        setShowForm(false); // Fechar o formulário ao clicar no botão de "Cancelar"
+    }
 
     async function carregaDados(){
         try {
@@ -82,7 +89,7 @@ export default function Home() {
     }, [searchTerm, filteredData]);
 
     function toggleFormVisibility() {
-        setShowForm(!showForm);
+        setShowForm(true); // Mostrar o formulário ao clicar no botão
     }
 
     async function handleSubmit() {
@@ -129,7 +136,7 @@ export default function Home() {
             value={searchTerm}
         />
     </View>
-
+    <Text style={styles.list}>Lista de Ongs em Manaus</Text>
     <FlatList 
         style={{ marginTop: 20 }}
         contentContainerStyle={{ marginHorizontal: 20 }}
@@ -141,9 +148,11 @@ export default function Home() {
         <Text style={styles.noResultsText}>Nenhum resultado encontrado.</Text>
     )}
 
-    <TouchableOpacity style={styles.addButton} onPress={toggleFormVisibility}>
-        <Text style={styles.addButtonText}>Inserir ponto de coleta</Text>
-    </TouchableOpacity>
+    {!showForm && (
+        <TouchableOpacity style={styles.addButton} onPress={toggleFormVisibility}>
+            <Text style={styles.addButtonText}>Inserir</Text>
+        </TouchableOpacity>
+    )}
 
     {showForm && (
         <View style={styles.formContainer}>
@@ -168,6 +177,10 @@ export default function Home() {
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                 <Text style={styles.submitButtonText}>Salvar</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity style={styles.closeButton} onPress={handleCloseForm}>
+            <Text style={styles.closeButtonText}>Cancelar</Text>
+         </TouchableOpacity>
         </View>
     )}
 </View>
@@ -207,7 +220,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     cardContainer: {
-        backgroundColor: '#F0F0F0',
+        backgroundColor: '#DD92F0',
         borderRadius: 8,
         padding: 20,
         marginBottom: 10,
@@ -216,10 +229,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        color:'white'
     },
     cardText: {
         fontSize: 16,
         marginBottom: 3,
+        color:'white' ///
     },
     noResultsText: {
         alignSelf: 'center',
@@ -228,7 +243,7 @@ const styles = StyleSheet.create({
         color:'#A1A1A1'
     },
     addButton: {
-        backgroundColor: 'blue',
+        backgroundColor: '#D4B4DC',
         padding: 10,
         borderRadius: 8,
         margin: 20,
@@ -240,10 +255,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     formContainer: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#E9CAF0',
         borderRadius: 8,
         padding: 20,
         margin: 20,
+    },
+    list: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'black', 
+        marginTop: 10, 
+        marginTop: 10, 
+        marginLeft: 20, 
     },
     input: {
         height: 40,
@@ -252,14 +275,29 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 10,
         paddingHorizontal: 10,
+        backgroundColor:'#FFF'
+    },
+    closeButton: {
+        backgroundColor: '#D4B4DC', 
+        padding: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginBottom: 20,
+        marginTop:10
+
     },
     submitButton: {
-        backgroundColor: 'blue',
+        backgroundColor: '#D4B4DC',
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',
     },
     submitButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    closeButtonText: {
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold',
