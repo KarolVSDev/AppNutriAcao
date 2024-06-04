@@ -136,7 +136,7 @@ export default function Home() {
             value={searchTerm}
         />
     </View>
-    <Text style={styles.list}>Lista de Ongs em Manaus</Text>
+    <Text style={styles.list}>ONG's dísponiveis</Text>
     <FlatList 
         style={{ marginTop: 20 }}
         contentContainerStyle={{ marginHorizontal: 20 }}
