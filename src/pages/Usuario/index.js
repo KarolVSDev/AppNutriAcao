@@ -1,32 +1,71 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const UserPage = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://192.168.100.8:3006/usuarios');
+        // Lógica para obter dados do usuário
+      } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const pickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert('Permissão para acessar a galeria é necessária!');
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
+  const handleLogout = () => {
+    navigation.navigate('Entrar');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
-        <Image style={styles.profileImage} source={require('../../assets/user.png')} />
-        <Text style={styles.name}>Nome</Text>
+        <TouchableOpacity onPress={pickImage}>
+          {selectedImage ? (
+            <Image source={{ uri: selectedImage }} style={styles.profileImage} />
+          ) : (
+            <View style={styles.placeholder}>
+              <Text style={styles.placeholderText}>Adicionar Foto</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+        {/* Texto do nome do usuário removido */}
       </View>
       <View style={styles.details}>
-        <View style={styles.detail}>
-          <Text style={styles.icon}>📧</Text>
-          <Text style={styles.text}>email@gmail.com</Text>
-          <TouchableOpacity style={styles.arrow}>
-            <Text style={styles.arrowText}>{'>'}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.detail}>
-          <Text style={styles.icon}>📞</Text>
-          <Text style={styles.text}>(92) 99455-1622</Text>
-          <TouchableOpacity style={styles.arrow}>
-            <Text style={styles.arrowText}>{'>'}</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Detalhes do usuário removidos */}
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={[styles.button, styles.editButton]}>
         <Text style={styles.buttonText}>Editar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleLogout}>
+        <Text style={styles.buttonText}>Sair</Text>
       </TouchableOpacity>
     </View>
   );
@@ -35,15 +74,28 @@ const UserPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#white',
+    backgroundColor: '#fff',
   },
   profile: {
     alignItems: 'center',
     marginTop: 40,
   },
   profileImage: {
-    width: 80, // Definindo a largura desejada para a imagem do perfil
-    height: 80, // Definindo a altura desejada para a imagem do perfil
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  placeholder: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#d4b4dd',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   name: {
     fontSize: 20,
@@ -74,40 +126,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    backgroundColor: '#d4b4dd', 
+    backgroundColor: '#d4b4dd',
     padding: 15,
-    margin: 20,
+    marginHorizontal: 20,
+    marginBottom: 10,
     borderRadius: 10,
     alignItems: 'center',
+  },
+  editButton: {
+    marginBottom: 5,
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-  },
-  bottomSquare: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 60,
-    backgroundColor: '#B443D1',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 30,
-  },
-  icon1: {
-    width: 37,
-    height: 37,
-  },
-  icon2: {
-    width: 37,
-    height: 37,
-  },
-  icon3: {
-    width: 45,
-    height: 45,
-    marginTop: 10
   },
 });
 
