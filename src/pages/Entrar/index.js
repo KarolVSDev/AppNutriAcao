@@ -2,20 +2,33 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Entrar() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!email || !senha) {
             Alert.alert('Erro', 'Por favor, insira seu email e senha');
             return;
         }
 
-        // Passando email e senha como parâmetros na navegação
-        navigation.navigate('Home', { email, senha });
+        try {
+            const response = await axios.post('http://192.168.100.8:3006/usuarios', { email, senha });
+            const userData = response.data;
+
+            // Armazena os dados do usuário localmente
+            await AsyncStorage.setItem('userData', JSON.stringify(userData));
+
+            // Navega para a tela Home com os dados do usuário
+            navigation.navigate('Home', { email, senha });
+        } catch (error) {
+            Alert.alert('Erro', 'Erro ao fazer login');
+            console.error('Erro de login:', error);
+        }
     };
 
     return (
@@ -28,12 +41,14 @@ export default function Entrar() {
                 <Text style={styles.title}>Email</Text>
                 <TextInput
                     placeholder='Digite um email...'
+                    placeholderTextColor="#a1a1a1"
                     style={styles.input}
                     onChangeText={(text) => setEmail(text)}
                 />
                 <Text style={styles.title}>Senha</Text>
                 <TextInput
                     placeholder='Sua senha'
+                    placeholderTextColor="#a1a1a1"
                     style={styles.input}
                     secureTextEntry={true}
                     onChangeText={(text) => setSenha(text)}

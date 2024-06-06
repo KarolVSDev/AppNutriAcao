@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-
-export default function Cadastro() {
+export default function Ong() {
     const navigation = useNavigation(); 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
@@ -14,13 +13,13 @@ export default function Cadastro() {
     const [numero, setNumero] = useState('');
     const [senha, setSenha] = useState('');
 
-    const handleCadastro = async () => {
+    const handleOng = async () => {
         if (!nome || !email || !cnpj || !telefone || !cep || !rua || !numero || !senha) {
             Alert.alert('Erro', 'Por favor, preencha todos os campos.');
             return;
         }
         try {
-            const response = await fetch('http://192.168.100.8:3006/cadastro', {
+            const response = await fetch('http://192.168.100.8:3006/ongs', { // Rota para cadastro de ONG
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,7 +97,7 @@ export default function Cadastro() {
                 secureTextEntry={true}
                 onChangeText={(text) => setSenha(text)}
             />
-            <TouchableOpacity style={styles.button} onPress={handleCadastro}>
+            <TouchableOpacity style={styles.button} onPress={handleOng}>
                 <Text style={styles.buttonText}>Cadastrar</Text>
             </TouchableOpacity>
         </View>

@@ -136,7 +136,7 @@ export default function Home() {
             value={searchTerm}
         />
     </View>
-    <Text style={styles.list}>ONG's dísponiveis</Text>
+    <Text style={styles.list}>ONG's e pontos de coleta</Text>
     <FlatList 
         style={{ marginTop: 20 }}
         contentContainerStyle={{ marginHorizontal: 20 }}
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     cardContainer: {
-        backgroundColor: '#DD92F0',
+        backgroundColor: '#B443D1',
         borderRadius: 8,
         padding: 20,
         marginBottom: 10,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
         color:'#A1A1A1'
     },
     addButton: {
-        backgroundColor: '#D4B4DC',
+        backgroundColor: '#3984d4',
         padding: 10,
         borderRadius: 8,
         margin: 20,
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     formContainer: {
-        backgroundColor: '#E9CAF0',
+        backgroundColor: '#C655E3',
         borderRadius: 8,
         padding: 20,
         margin: 20,
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#FFF'
     },
     closeButton: {
-        backgroundColor: '#D4B4DC', 
+        backgroundColor: '#3984d4', 
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
 
     },
     submitButton: {
-        backgroundColor: '#D4B4DC',
+        backgroundColor: '#3984d4',
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',

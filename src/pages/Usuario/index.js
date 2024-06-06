@@ -3,16 +3,24 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://192.168.100.8:3006/usuarios');
-        // Lógica para obter dados do usuário
+        // Recupera os dados do usuário armazenados localmente
+        const storedUserData = await AsyncStorage.getItem('userData');
+        if (storedUserData) {
+          const parsedUserData = JSON.parse(storedUserData);
+          console.log('Dados do usuário recuperados:', parsedUserData);
+          setUserData(parsedUserData.data);  // Corrige aqui para acessar o objeto data
+        }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
       }
@@ -40,7 +48,14 @@ const UserPage = () => {
     }
   };
 
-  const handleLogout = () => {
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleLogout = async () => {
+
+    // Limpa os dados do usuário armazenados localmente ao fazer logout
+    await AsyncStorage.removeItem('userData');
     navigation.navigate('Entrar');
   };
 
@@ -56,14 +71,41 @@ const UserPage = () => {
             </View>
           )}
         </TouchableOpacity>
-        {/* Texto do nome do usuário removido */}
+        {userData && (
+          <Text style={styles.name}>{userData.nome}</Text>
+        )}
       </View>
+      {/* Detalhes do usuário */}
       <View style={styles.details}>
-        {/* Detalhes do usuário removidos */}
+        <View style={styles.detail}>
+          <Text style={styles.icon}>Email: </Text>
+          <Text style={styles.text}>{userData ? userData.email : ''}</Text>
+        </View>
+        <View style={styles.detail}>
+          <Text style={styles.icon}>Telefone: </Text>
+          <Text style={styles.text}>{userData ? userData.telefone : ''}</Text>
+        </View>
+        <View style={styles.detail}>
+          <Text style={styles.icon}>Senha: </Text>
+          <Text style={styles.text}>
+            {showPassword ? userData.senha : '********'}
+          </Text>
+          <TouchableOpacity onPress={togglePasswordVisibility}>
+            <Text style={styles.showPasswordText}>
+              {showPassword ? 'Esconder' : 'Mostrar'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.detail}>
+          <Text style={styles.icon}>CNPJ: </Text>
+          <Text style={styles.text}>{userData ? userData.cnpj : ''}</Text>
+        </View>
+        <View style={styles.detail}>
+          <Text style={styles.icon}>CEP: </Text>
+          <Text style={styles.text}>{userData ? userData.cep : ''}</Text>
+        </View>
+        {/* Adicione mais detalhes conforme necessário */}
       </View>
-      <TouchableOpacity style={[styles.button, styles.editButton]}>
-        <Text style={styles.buttonText}>Editar</Text>
-      </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Sair</Text>
       </TouchableOpacity>
@@ -89,13 +131,14 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#d4b4dd',
+    backgroundColor: '#828282',
     justifyContent: 'center',
     alignItems: 'center',
   },
   placeholderText: {
     color: 'white',
     fontWeight: 'bold',
+    textAlign:'center'
   },
   name: {
     fontSize: 20,
@@ -109,14 +152,20 @@ const styles = StyleSheet.create({
   detail: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 18,
   },
   icon: {
     fontSize: 20,
     marginRight: 10,
+    fontWeight:'bold'
   },
   text: {
     fontSize: 16,
+  },
+  showPasswordText: {
+    fontSize: 16,
+    color: 'blue',
+    marginLeft: 70,
   },
   arrow: {
     marginLeft: 'auto',
@@ -126,7 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    backgroundColor: '#d4b4dd',
+    backgroundColor: '#B443D1',
     padding: 15,
     marginHorizontal: 20,
     marginBottom: 10,

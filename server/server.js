@@ -14,6 +14,7 @@ const connection = mysql.createConnection({
   database: 'appnutri'
 });
 
+
 // Verificar a conexão com o banco de dados
 connection.connect((err) => {
   if (err) {
@@ -22,6 +23,9 @@ connection.connect((err) => {
   }
   console.log('Conexão bem-sucedida ao banco de dados MySQL');
 });
+
+
+
 // Rota para buscar todos os pontos de coleta
 app.get('/pontos_coleta', (req, res) => {
   const query = 'SELECT * FROM pontos_coleta';
@@ -37,12 +41,14 @@ app.get('/pontos_coleta', (req, res) => {
 });
 
 
+
+
 // Rota para salvar um ponto de coleta
 app.post('/pontos_coleta', (req, res) => {
   const newPonto = {
-      nome: req.body.nome,
-      endereco: req.body.endereco,
-      zona: req.body.zona
+    nome: req.body.nome,
+    endereco: req.body.endereco,
+    zona: req.body.zona
   };
 
   const query = 'INSERT INTO pontos_coleta (nome, endereco, zona) VALUES (?, ?, ?)';
@@ -59,60 +65,111 @@ app.post('/pontos_coleta', (req, res) => {
 });
 
 
-// Rota para cadastro de usuários
+
+
+// Rota para cadastro de usuários normais
 app.post('/cadastro', (req, res) => {
   const { nome, email, cnpj, telefone, cep, rua, numero, senha } = req.body;
-  
+
   // Verificar se o email já está em uso
   connection.query('SELECT * FROM usuarios WHERE email = ?', [email], (err, results) => {
+    if (err) {
+      console.error('Erro ao verificar email:', err);
+      res.status(500).json({ message: 'Erro ao verificar email' });
+      return;
+    }
+
+    if (results.length > 0) {
+      // O email já está em uso
+      res.status(400).json({ error: 'Email já está em uso' });
+      return;
+    }
+
+    // Verificar se o CNPJ já está em uso
+    connection.query('SELECT * FROM usuarios WHERE cnpj = ?', [cnpj], (err, results) => {
       if (err) {
-          console.error('Erro ao verificar email:', err);
-          res.status(500).json({ message: 'Erro ao verificar email' });
-          return;
+        console.error('Erro ao verificar CNPJ:', err);
+        res.status(500).json({ message: 'Erro ao verificar CNPJ' });
+        return;
       }
 
       if (results.length > 0) {
-          // O email já está em uso
-          res.status(400).json({ error: 'Email já está em uso' });
-          return;
+        // O CNPJ já está em uso
+        res.status(400).json({ error: 'CNPJ já está em uso' });
+        return;
       }
 
-      // Verificar se o CNPJ já está em uso
-      connection.query('SELECT * FROM usuarios WHERE cnpj = ?', [cnpj], (err, results) => {
-          if (err) {
-              console.error('Erro ao verificar CNPJ:', err);
-              res.status(500).json({ message: 'Erro ao verificar CNPJ' });
-              return;
-          }
-
-          if (results.length > 0) {
-              // O CNPJ já está em uso
-              res.status(400).json({ error: 'CNPJ já está em uso' });
-              return;
-          }
-
-          // Se o email e o CNPJ não estão em uso, inserir o usuário no banco de dados
-          const sql = 'INSERT INTO usuarios (nome, email, cnpj, telefone, cep, rua, numero, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-          connection.query(sql, [nome, email, cnpj, telefone, cep, rua, numero, senha], (err, result) => {
-              if (err) {
-                  console.error('Erro ao cadastrar usuário:', err);
-                  res.status(500).json({ message: 'Erro ao cadastrar usuário' });
-              } else {
-                  console.log('Usuário cadastrado com sucesso');
-                  res.status(200).json({ message: 'Usuário cadastrado com sucesso' });
-                  // Redirecionar para a página de login após o cadastro bem-sucedido
-                  // res.redirect('/Entrar'); // Isso só funcionaria se você estivesse usando Express com renderização de páginas
-              }
-          });
+      // Se o email e o CNPJ não estão em uso, inserir o usuário no banco de dados
+      const sql = 'INSERT INTO usuarios (nome, email, cnpj, telefone, cep, rua, numero, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+      connection.query(sql, [nome, email, cnpj, telefone, cep, rua, numero, senha], (err, result) => {
+        if (err) {
+          console.error('Erro ao cadastrar usuário:', err);
+          res.status(500).json({ message: 'Erro ao cadastrar usuário' });
+        } else {
+          console.log('Usuário cadastrado com sucesso');
+          res.status(200).json({ message: 'Usuário cadastrado com sucesso' });
+        }
       });
+    });
   });
 });
+
+
+
+
+// rota para cadastro de ongs 
+app.post('/ongs', (req, res) => {
+  const { nome, email, cnpj, telefone, cep, rua, numero, senha } = req.body;
+
+  // Verificar se o email já está em uso
+  connection.query('SELECT * FROM ongs WHERE email = ?', [email], (err, results) => {
+    if (err) {
+      console.error('Erro ao verificar email:', err);
+      res.status(500).json({ message: 'Erro ao verificar email' });
+      return;
+    }
+
+    if (results.length > 0) {
+      // O email já está em uso
+      res.status(400).json({ error: 'Email já está em uso' });
+      return;
+    }
+
+    // Verificar se o CNPJ já está em uso
+    connection.query('SELECT * FROM ongs WHERE cnpj = ?', [cnpj], (err, results) => {
+      if (err) {
+        console.error('Erro ao verificar CNPJ:', err);
+        res.status(500).json({ message: 'Erro ao verificar CNPJ' });
+        return;
+      }
+
+      if (results.length > 0) {
+        // O CNPJ já está em uso
+        res.status(400).json({ error: 'CNPJ já está em uso' });
+        return;
+      }
+
+      // Se o email e o CNPJ não estão em uso, inserir o usuário no banco de dados
+      const sql = 'INSERT INTO ongs (nome, email, cnpj, telefone, cep, rua, numero, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+      connection.query(sql, [nome, email, cnpj, telefone, cep, rua, numero, senha], (err, result) => {
+        if (err) {
+          console.error('Erro ao cadastrar ONG:', err);
+          res.status(500).json({ message: 'Erro ao cadastrar ONG' });
+        } else {
+          console.log('ONG cadastrada com sucesso');
+          res.status(200).json({ message: 'ONG cadastrada com sucesso' });
+        }
+      });
+    });
+  });
+});
+
+
+
 
 // Rota para login de usuário
 app.post('/usuarios', (req, res) => {
   const { email, senha } = req.body;
-  console.log('Email recebido:', email);
-  console.log('Senha recebida:', senha);
 
   if (!email || !senha) {
     res.status(400).json({ error: 'Email e senha são obrigatórios' });
@@ -144,20 +201,31 @@ app.post('/usuarios', (req, res) => {
       return;
     }
 
-    // Retornar os dados dos usuários
-    const allUsersQuery = 'SELECT * FROM usuarios';
-    connection.query(allUsersQuery, (error, allUsers) => {
-      if (error) {
-        console.error('Erro ao buscar todos os usuários:', error);
-        res.status(500).json({ error: 'Erro interno do servidor ao buscar todos os usuários' });
-        return;
-      }
-
-      console.log('Todos os usuários:', allUsers);
-      res.status(200).json({ message: 'Login bem-sucedido', data: allUsers });
-    });
+    // Se o usuário foi autenticado com sucesso, retornar os dados do usuário na resposta
+    res.status(200).json({ message: 'Login bem-sucedido', data: user });
   });
 });
+
+
+
+
+// Rota para retornar todos os usuários
+app.get('/usuarios/todos', (req, res) => {
+  const allUsersQuery = 'SELECT * FROM usuarios';
+  connection.query(allUsersQuery, (error, allUsers) => {
+    if (error) {
+      console.error('Erro ao buscar todos os usuários:', error);
+      res.status(500).json({ error: 'Erro interno do servidor ao buscar todos os usuários' });
+      return;
+    }
+
+    console.log('Todos os usuários:', allUsers);
+    res.status(200).json(allUsers);
+  });
+});
+
+
+
 
 // Iniciar o servidor
 app.listen(port, () => {

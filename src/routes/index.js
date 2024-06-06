@@ -6,7 +6,7 @@ import Entrar from '../pages/Entrar';
 import Cadastro_user from '../pages/Cadastro_user';
 import Pergunta from '../pages/Pergunta';
 import Welcome from '../pages/Welcome';
-import Cadastro from '../pages/Cadastro';
+import Ong from '../pages/Ong';
 import Home from '../pages/Home';
 import Usuario from '../pages/Usuario';
 import Config from '../pages/Configuracao';
@@ -57,8 +57,8 @@ export default function Routes() {
                 options={{headerShown: false}}
             />
                 <Stack.Screen 
-                name="Cadastro" 
-                component={Cadastro} 
+                name="Ong" 
+                component={Ong} 
                 options={{headerShown: false}}
             />
                <Stack.Screen 

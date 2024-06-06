@@ -12,6 +12,10 @@ import {
 
 export default function Pergunta() {
     const navigation = useNavigation();
+    const handleOptionSelection = (isONG) => {
+        navigation.navigate(isONG ? 'Ong' : 'Cadastro_user');
+    };
+
     return (
         <View style={styles.containerLogo}>
             <View style={styles.container}>
@@ -25,10 +29,10 @@ export default function Pergunta() {
             <Animatable.View animation='fadeInUp' delay={600} style={styles.containerForm}>
                 <Text style={styles.title}>Você é uma ONG?</Text>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Cadastro')}>
+                    <TouchableOpacity style={styles.button} onPress={() => handleOptionSelection(true)}>
                         <Text style={styles.buttonText}>SIM</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Cadastro_user')}>
+                    <TouchableOpacity style={styles.button} onPress={() => handleOptionSelection(false)}>
                         <Text style={styles.buttonText}>NÃO</Text>
                     </TouchableOpacity>
                 </View>
@@ -37,7 +41,7 @@ export default function Pergunta() {
     );
 }
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
