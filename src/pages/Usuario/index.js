@@ -20,7 +20,7 @@ const UserPage = () => {
         if (storedUserData) {
           const parsedUserData = JSON.parse(storedUserData);
           console.log('Dados do usuário recuperados:', parsedUserData);
-          setUserData(parsedUserData.data);  // Corrige aqui para acessar o objeto data
+          setUserData(parsedUserData.data);  
         }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
@@ -46,6 +46,7 @@ const UserPage = () => {
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
+     // saveImageURI(result.assets[0].uri); // Salva a URI da imagem no AsyncStorage
     }
   };
 
@@ -56,6 +57,7 @@ const UserPage = () => {
   const handleLogout = async () => {
     // Limpa os dados do usuário armazenados localmente ao fazer logout
     await AsyncStorage.removeItem('userData');
+    // Não é necessário limpar a URI da imagem ao fazer logout
     navigation.navigate('Entrar');
   };
 

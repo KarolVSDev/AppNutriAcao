@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons'; 
 
 export default function Ong() {
     const navigation = useNavigation(); 
@@ -50,10 +51,17 @@ export default function Ong() {
         }
     };
 
+
+    const pickImage = async () => {
+        // Implemente aqui a função para selecionar uma imagem da galeria
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Cadastro</Text>
-            <View style={styles.circle}><Image style={{width:125, height:125, marginBottom:10}} source={require('../../assets/user.png')}/></View>
+            <TouchableOpacity style={styles.circle} onPress={pickImage}>
+                <FontAwesome name="user-circle-o" size={100} color="gray" />
+            </TouchableOpacity>
             
             
             <TextInput
@@ -147,6 +155,8 @@ const styles = StyleSheet.create({
         height: 125,
         borderRadius: 125 / 2,
         backgroundColor: "white",
-        bottom: 15,
-      },
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
 });
