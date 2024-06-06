@@ -12,10 +12,6 @@ export default function Config({ navigation }) {
     Linking.openURL('https://wa.me/93984144376'); 
   };
 
-  const handleAccessibilityPress = () => {
-    navigation.navigate('Acessibilidade');
-  };
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -42,10 +38,6 @@ export default function Config({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity style={styles.smallSquare} onPress={handleWhatsAppPress}>
             <Text style={styles.squareText}>Fale Conosco</Text>
-            <Text style={styles.arrow}>→</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.smallSquare} onPress={handleAccessibilityPress}>
-            <Text style={styles.squareText}>Acessibilidade</Text>
             <Text style={styles.arrow}>→</Text>
           </TouchableOpacity>
           <Image style={styles.logo} source={require('../../assets/logonutri.png')} />
@@ -76,14 +68,14 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     alignItems: 'center',
-    paddingBottom: 60, // Espaço para o quadrado na parte inferior
+    paddingBottom: 60,
   },
   card: {
     width: '100%',
     backgroundColor: '#B443D1',
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
-    padding: 20,
+    padding: 30,
     alignItems: 'center',
   },
   img: {

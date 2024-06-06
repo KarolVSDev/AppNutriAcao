@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome } from '@expo/vector-icons';
 
 const UserPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -53,7 +54,6 @@ const UserPage = () => {
   };
 
   const handleLogout = async () => {
-
     // Limpa os dados do usuário armazenados localmente ao fazer logout
     await AsyncStorage.removeItem('userData');
     navigation.navigate('Entrar');
@@ -78,15 +78,18 @@ const UserPage = () => {
       {/* Detalhes do usuário */}
       <View style={styles.details}>
         <View style={styles.detail}>
-          <Text style={styles.icon}>Email: </Text>
+          <FontAwesome name="envelope" size={20} style={styles.icon} />
+          <Text style={styles.label}>Email: </Text>
           <Text style={styles.text}>{userData ? userData.email : ''}</Text>
         </View>
         <View style={styles.detail}>
-          <Text style={styles.icon}>Telefone: </Text>
+          <FontAwesome name="phone" size={20} style={styles.icon} />
+          <Text style={styles.label}>Telefone: </Text>
           <Text style={styles.text}>{userData ? userData.telefone : ''}</Text>
         </View>
         <View style={styles.detail}>
-          <Text style={styles.icon}>Senha: </Text>
+          <FontAwesome name="lock" size={20} style={styles.icon} />
+          <Text style={styles.label}>Senha: </Text>
           <Text style={styles.text}>
             {showPassword ? userData.senha : '********'}
           </Text>
@@ -97,11 +100,8 @@ const UserPage = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.detail}>
-          <Text style={styles.icon}>CNPJ: </Text>
-          <Text style={styles.text}>{userData ? userData.cnpj : ''}</Text>
-        </View>
-        <View style={styles.detail}>
-          <Text style={styles.icon}>CEP: </Text>
+          <FontAwesome name="map-marker" size={20} style={styles.icon} />
+          <Text style={styles.label}>CEP: </Text>
           <Text style={styles.text}>{userData ? userData.cep : ''}</Text>
         </View>
         {/* Adicione mais detalhes conforme necessário */}
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   placeholderText: {
     color: 'white',
     fontWeight: 'bold',
-    textAlign:'center'
+    textAlign: 'center',
   },
   name: {
     fontSize: 20,
@@ -157,7 +157,12 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 20,
     marginRight: 10,
-    fontWeight:'bold'
+    fontWeight: 'bold',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 5,
   },
   text: {
     fontSize: 16,
@@ -165,7 +170,7 @@ const styles = StyleSheet.create({
   showPasswordText: {
     fontSize: 16,
     color: 'blue',
-    marginLeft: 70,
+    marginLeft: 10,
   },
   arrow: {
     marginLeft: 'auto',
