@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar } from "expo-status-bar";
+import { Feather } from '@expo/vector-icons'; 
 import Slider from '@react-native-community/slider';
 import { View, Text, StyleSheet, Image, ScrollView, Linking, TouchableOpacity, Modal } from 'react-native';
 
@@ -19,12 +20,10 @@ export default function Config({ navigation, userName }) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.card}>
-          <Image style={styles.img} source={require('../../assets/logoong.png')} />
-        </View>
-        <View>
-          <Text style={styles.config}>CONFIGURAÇÕES</Text>
-        </View>
+      <View style={styles.card}>
+      <Text style={styles.config}>CONFIGURAÇÕES</Text>
+      </View>
+
         <View style={styles.newSquare}>
           {/* Quadrados pequenos */}
           <TouchableOpacity style={styles.smallSquare} onPress={() => setShowTermos(true)}>
@@ -154,8 +153,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#B443D1',
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
-    padding: 30,
+    padding: 50,
     alignItems: 'center',
+    marginTop: 40, 
   },
   img: {
     width: 92,
@@ -168,8 +168,9 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   config: {
-    color: '#689F38',
-    fontSize: 28,
+    color: '#fff',
+    fontSize: 25,
+    fontWeight: 'bold', 
     marginTop: 18,
   },
   newSquare: {

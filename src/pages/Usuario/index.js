@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   profile: {
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 70,
   },
   profileImage: {
     width: 80,

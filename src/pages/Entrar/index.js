@@ -15,27 +15,30 @@ export default function Entrar() {
             Alert.alert('Erro', 'Por favor, insira seu email e senha');
             return;
         }
-
+    
         try {
             // Tentar fazer login como usuário ou ONG
             const response = await axios.post('http://192.168.100.8:3006/login', { email, senha });
             const userData = response.data;
             
             // Verifica se o usuário é uma ONG
-            if(userData.tipo === 'ong') {
+            if (userData.tipo === 'ong') {
                 await AsyncStorage.setItem('ongData', JSON.stringify(userData));
+                // Navega para a tela Home
+                navigation.navigate('Home', { email, senha });
             } else {
+                // Se não for uma ONG, é um usuário comum
                 await AsyncStorage.setItem('userData', JSON.stringify(userData));
+                // Navega para a tela Home
+                navigation.navigate('Home', { email, senha });
             }
-            
-            // Navega para a tela Home
-            navigation.navigate('Home', { email, senha });
             return;
         } catch (error) {
             console.error('Erro de login:', error);
             Alert.alert('Erro', 'Erro ao fazer login. Verifique suas credenciais.');
         }
     };
+    
 
     return (
         <View style={styles.container}>
